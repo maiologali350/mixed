@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIXT number by sadi</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            deep: '#d93800',
+                            primary: '#ff5500',
+                            light: '#ff8c00',
+                            gold: '#ffb700',
+                            darkText: '#1a0c00',
+                            subText: '#4a2800'
+                        }
+                    },
+                    boxShadow: {
+                        'glass-premium': '0 20px 50px rgba(180, 40, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.9)',
+                        '3d-orange': '0 12px 28px -4px rgba(217, 56, 0, 0.5), 0 6px 12px -2px rgba(255, 85, 0, 0.3)',
+                        '3d-dark': '0 12px 28px -4px rgba(26, 12, 0, 0.4)',
+                        '3d-white': '0 10px 25px rgba(255, 255, 255, 0.6)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Outfit & Hind Siliguri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Hind Siliguri', 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #d93800 0%, #ff5500 50%, #ff8c00 100%);
+            color: #1a0c00;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 3D Canvas Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Frosted Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px rgba(180, 40, 0, 0.22), inset 0 1px 1px rgba(255, 255, 255, 1);
+        }
+
+        .glass-card-accent {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 238, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 25px 50px rgba(150, 30, 0, 0.25);
+        }
+
+        /* 3D Interactive Buttons */
+        .btn-3d {
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .btn-3d:active {
+            transform: translateY(2px) scale(0.98);
+        }
+
+        /* Custom Input Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 220, 200, 0.5);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ff5500, #d93800);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b32e00;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative z-10 selection:bg-brand-primary selection:text-white">
+
+    <!-- Three.js 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header Section -->
+    <header class="w-full border-b border-white/40 glass-card sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3.5">
+                <div class="p-3 rounded-2xl bg-gradient-to-tr from-brand-deep via-brand-primary to-brand-gold shadow-3d-orange flex items-center justify-center transform hover:rotate-12 transition duration-300">
+                    <i data-lucide="shuffle" class="w-7 h-7 text-white stroke-[2.5]"></i>
+                </div>
+                <div>
+                    <h1 class="font-['Outfit'] text-2xl sm:text-3xl font-black tracking-wider text-brand-darkText">
+                        MIXT number <span class="text-brand-deep underline decoration-brand-gold decoration-4">by sadi</span>
+                    </h1>
+                    <p class="text-xs text-brand-subText font-bold">Dynamic 2 or 3 Range List Alternator & Merger</p>
+                </div>
+            </div>
+
+            <!-- Header Badge -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/70 border border-white shadow-sm text-xs font-bold text-brand-darkText">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-primary animate-ping"></span>
+                    <span>3D Premium Visuals: <strong class="text-brand-deep">Active</strong></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 w-full flex-grow relative z-10">
+
+        <!-- Guidance Banner Card -->
+        <div class="mb-8 p-5 rounded-2xl glass-card-accent relative overflow-hidden group">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-gradient-to-br from-brand-gold/30 to-brand-primary/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-start gap-4 relative z-10">
+                <div class="p-3.5 rounded-2xl bg-gradient-to-tr from-brand-deep to-brand-primary text-white shadow-3d-orange shrink-0">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                </div>
+                <div class="text-sm text-brand-darkText leading-relaxed">
+                    <h2 class="font-black text-brand-darkText text-base mb-1 flex items-center gap-2">
+                        ব্যবহার করার নিয়মাবলী (How to use)
+                    </h2>
+                    <p class="font-medium text-brand-subText">
+                        আপনার প্রয়োজন অনুযায়ী <strong>২টি বা ৩টি</strong> বক্সে নম্বরের লিস্ট পেস্ট করুন:
+                    </p>
+                    <ul class="list-disc list-inside mt-1 space-y-1 text-xs font-bold text-brand-darkText">
+                        <li><strong>২টি Range দিলে:</strong> Range 1 ➔ Range 2 ➔ Range 1 ➔ Range 2 অনুযায়ী অল্টারনেট হবে।</li>
+                        <li><strong>৩টি Range দিলে:</strong> Range 1 ➔ Range 2 ➔ Range 3 ➔ Range 1 ➔ Range 2 ➔ Range 3 অনুযায়ী সাজিয়ে দিবে।</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic 3 Range Inputs Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            
+            <!-- Range 1 Box -->
+            <div class="flex flex-col space-y-2.5">
+                <div class="flex justify-between items-center px-1">
+                    <label for="range1" class="text-sm font-black text-white drop-shadow-sm flex items-center gap-2">
+                        <i data-lucide="list-ordered" class="w-4 h-4 text-brand-darkText"></i> Range 1
+                    </label>
+                    <span id="stat-r1" class="text-xs font-bold text-brand-darkText bg-white/90 px-3 py-1 rounded-full border border-white shadow-sm font-mono">
+                        0 টি আইটেম
+                    </span>
+                </div>
+                <div class="relative group">
+                    <textarea 
+                        id="range1" 
+                        rows="9" 
+                        class="w-full bg-white/90 border-2 border-white/80 rounded-2xl p-4 font-mono text-sm text-brand-darkText font-bold focus:outline-none focus:border-brand-deep focus:bg-white focus:ring-4 focus:ring-brand-primary/20 transition-all duration-200 resize-y placeholder-gray-400 shadow-glass-premium"
+                        placeholder="এখানে Range 1 এর নাম্বার পেস্ট করুন..."
+                    ></textarea>
+                    <button id="clear-r1" class="absolute top-3 right-3 p-2 rounded-xl bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 transition shadow" title="Clear Range 1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Range 2 Box -->
+            <div class="flex flex-col space-y-2.5">
+                <div class="flex justify-between items-center px-1">
+                    <label for="range2" class="text-sm font-black text-white drop-shadow-sm flex items-center gap-2">
+                        <i data-lucide="list-ordered" class="w-4 h-4 text-brand-darkText"></i> Range 2
+                    </label>
+                    <span id="stat-r2" class="text-xs font-bold text-brand-darkText bg-white/90 px-3 py-1 rounded-full border border-white shadow-sm font-mono">
+                        0 টি আইটেম
+                    </span>
+                </div>
+                <div class="relative group">
+                    <textarea 
+                        id="range2" 
+                        rows="9" 
+                        class="w-full bg-white/90 border-2 border-white/80 rounded-2xl p-4 font-mono text-sm text-brand-darkText font-bold focus:outline-none focus:border-brand-deep focus:bg-white focus:ring-4 focus:ring-brand-primary/20 transition-all duration-200 resize-y placeholder-gray-400 shadow-glass-premium"
+                        placeholder="এখানে Range 2 এর নাম্বার পেস্ট করুন..."
+                    ></textarea>
+                    <button id="clear-r2" class="absolute top-3 right-3 p-2 rounded-xl bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 transition shadow" title="Clear Range 2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Range 3 Box (Optional) -->
+            <div class="flex flex-col space-y-2.5">
+                <div class="flex justify-between items-center px-1">
+                    <label for="range3" class="text-sm font-black text-white drop-shadow-sm flex items-center gap-2">
+                        <i data-lucide="list-ordered" class="w-4 h-4 text-brand-darkText"></i> Range 3 <span class="text-xs font-normal text-white/90">(Optional)</span>
+                    </label>
+                    <span id="stat-r3" class="text-xs font-bold text-brand-darkText bg-white/90 px-3 py-1 rounded-full border border-white shadow-sm font-mono">
+                        0 টি আইটেম
+                    </span>
+                </div>
+                <div class="relative group">
+                    <textarea 
+                        id="range3" 
+                        rows="9" 
+                        class="w-full bg-white/90 border-2 border-white/80 rounded-2xl p-4 font-mono text-sm text-brand-darkText font-bold focus:outline-none focus:border-brand-deep focus:bg-white focus:ring-4 focus:ring-brand-primary/20 transition-all duration-200 resize-y placeholder-gray-400 shadow-glass-premium"
+                        placeholder="এখানে Range 3 এর নাম্বার পেস্ট করুন (অপশনাল)..."
+                    ></textarea>
+                    <button id="clear-r3" class="absolute top-3 right-3 p-2 rounded-xl bg-gray-100 hover:bg-red-500 hover:text-white text-gray-500 transition shadow" title="Clear Range 3">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controls & Options Card -->
+        <div class="glass-card rounded-3xl p-6 mb-8 shadow-glass-premium relative">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-3.5 w-full lg:w-auto">
+                    
+                    <!-- Main Mix Button -->
+                    <button 
+                        id="btn-alternate" 
+                        class="btn-3d flex-1 sm:flex-none px-8 py-4 bg-gradient-to-r from-brand-deep via-brand-primary to-orange-500 text-white font-black rounded-2xl shadow-3d-orange flex items-center justify-center gap-2.5 text-base cursor-pointer"
+                    >
+                        <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+                        <span>MIX Alternated List</span>
+                    </button>
+
+                    <!-- Demo Button -->
+                    <button 
+                        id="btn-demo" 
+                        class="btn-3d px-5 py-4 bg-white/80 hover:bg-white text-brand-darkText border border-white/90 rounded-2xl transition flex items-center gap-2 text-sm font-bold shadow-sm"
+                    >
+                        <i data-lucide="flask-conical" class="w-4 h-4 text-brand-deep"></i>
+                        <span>ডেমো টেস্ট</span>
+                    </button>
+
+                    <!-- Clear All Button -->
+                    <button 
+                        id="btn-clear-all" 
+                        class="btn-3d px-5 py-4 bg-red-100 hover:bg-red-200 border border-red-200 text-red-700 rounded-2xl transition flex items-center gap-2 text-sm font-bold shadow-sm"
+                    >
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        <span>সব রিসেট</span>
+                    </button>
+                </div>
+
+                <!-- Format Settings -->
+                <div class="flex flex-wrap items-center gap-5 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 border-brand-primary/20">
+                    
+                    <div class="flex flex-col space-y-1">
+                        <label class="text-xs font-bold text-brand-darkText">আউটপুট সেপারেটর:</label>
+                        <select id="delimiter-select" class="bg-white border-2 border-brand-primary/30 text-xs sm:text-sm text-brand-darkText font-bold rounded-xl p-2.5 focus:outline-none focus:border-brand-deep shadow-sm">
+                            <option value="newline">নতুন লাইন (Line Break)</option>
+                            <option value="comma">কমা (,)</option>
+                            <option value="comma-space">কমা + স্পেস (, )</option>
+                            <option value="space">স্পেস (Space)</option>
+                            <option value="custom">কাস্টম সেপারেটর</option>
+                        </select>
+                    </div>
+
+                    <input 
+                        type="text" 
+                        id="custom-delimiter" 
+                        placeholder="যেমন: | বা -" 
+                        class="hidden bg-white border-2 border-brand-primary/30 text-xs sm:text-sm text-brand-darkText font-bold rounded-xl p-2.5 w-28 focus:outline-none focus:border-brand-deep mt-5 shadow-sm"
+                    />
+
+                    <!-- Filter Options -->
+                    <div class="flex flex-col space-y-2 pt-1">
+                        <label class="flex items-center space-x-2 cursor-pointer text-xs font-bold text-brand-darkText">
+                            <input type="checkbox" id="chk-duplicates" class="w-4 h-4 rounded text-brand-deep focus:ring-brand-primary cursor-pointer">
+                            <span>ডুপ্লিকেট নম্বর বাদ দিন</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer text-xs font-bold text-brand-darkText">
+                            <input type="checkbox" id="chk-blanks" checked class="w-4 h-4 rounded text-brand-deep focus:ring-brand-primary cursor-pointer">
+                            <span>খালি লাইন বাদ দিন</span>
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Output Result Panel -->
+        <div class="glass-card-accent rounded-3xl p-6 shadow-glass-premium relative">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-3.5 rounded-2xl bg-gradient-to-tr from-brand-deep to-brand-primary text-white shadow-3d-orange">
+                        <i data-lucide="file-output" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-brand-darkText flex items-center gap-2">
+                            MIXT Output Result
+                        </h2>
+                        <p id="stat-output" class="text-xs font-bold font-mono text-brand-deep">
+                            মোট নম্বর: 0 টি
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Output Actions -->
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    
+                    <!-- 1-Click Copy -->
+                    <button 
+                        id="btn-copy" 
+                        class="btn-3d flex-1 sm:flex-none px-7 py-3.5 bg-slate-900 hover:bg-black text-white font-black rounded-2xl shadow-3d-dark transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    >
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span id="copy-btn-text">১ ক্লিকে কপি করুন</span>
+                    </button>
+
+                    <!-- Download TXT -->
+                    <button 
+                        id="btn-download" 
+                        class="btn-3d flex-1 sm:flex-none px-7 py-3.5 bg-gradient-to-r from-brand-deep to-brand-primary hover:brightness-110 text-white font-black rounded-2xl shadow-3d-orange transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    >
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>ডাউনলোড .TXT</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Output Text Area -->
+            <div class="relative group">
+                <textarea 
+                    id="output-result" 
+                    rows="11" 
+                    readonly 
+                    class="w-full bg-white/95 border-2 border-brand-primary/30 rounded-2xl p-4 font-mono text-sm text-brand-darkText font-bold focus:outline-none focus:border-brand-deep transition duration-200 resize-y placeholder-gray-400 shadow-inner leading-relaxed"
+                    placeholder="আপনার মিক্স করা আউটপুট নম্বরগুলো এখানে অটোমেটিক চলে আসবে..."
+                ></textarea>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-white/40 glass-card py-4 mt-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs font-bold text-brand-darkText flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>MIXT number by sadi • 3D Premium Orange Edition</span>
+            <span class="text-brand-deep flex items-center gap-1 font-extrabold">
+                <i data-lucide="shield-check" class="w-4 h-4"></i> Safe & High-Speed Processing
+            </span>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border-2 border-brand-gold text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 z-50 pointer-events-none">
+        <div class="p-1 rounded-lg bg-brand-primary text-white">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+        <span id="toast-text" class="text-sm font-bold">নোটিফিকেশন মেসেজ</span>
+    </div>
+
+    <!-- JavaScript Engine -->
+    <script>
+        /* -------------------------------------------------------------
+           1. THREE.JS RICH ORANGE & WHITE 3D SCENE
+        ------------------------------------------------------------- */
+        let scene, camera, renderer, particleSystem, shapeGroup;
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        function init3D() {
+            const container = document.getElementById('bg-canvas');
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0xd93800, 0.012);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 45;
+
+            renderer = new THREE.WebGLRenderer({ canvas: container, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Floating Particles (White and Warm Gold)
+            const particleCount = 700;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            const colorWhite = new THREE.Color(0xffffff);
+            const colorGold = new THREE.Color(0xffe600);
+
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 140;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 140;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 140;
+
+                const chosenColor = Math.random() > 0.4 ? colorWhite : colorGold;
+                colors[i * 3] = chosenColor.r;
+                colors[i * 3 + 1] = chosenColor.g;
+                colors[i * 3 + 2] = chosenColor.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.9,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.85,
+                blending: THREE.AdditiveBlending
+            });
+
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+
+            // Floating Glossy White Geometric Shapes
+            shapeGroup = new THREE.Group();
+
+            const shapeMat = new THREE.MeshBasicMaterial({ 
+                color: 0xffffff, 
+                wireframe: true, 
+                transparent: true, 
+                opacity: 0.35 
+            });
+
+            // Icosahedron
+            const geo1 = new THREE.IcosahedronGeometry(8, 1);
+            const mesh1 = new THREE.Mesh(geo1, shapeMat);
+            mesh1.position.set(-28, 14, -15);
+            shapeGroup.add(mesh1);
+
+            // Octahedron
+            const geo2 = new THREE.OctahedronGeometry(6.5, 0);
+            const mesh2 = new THREE.Mesh(geo2, shapeMat);
+            mesh2.position.set(30, -12, -18);
+            shapeGroup.add(mesh2);
+
+            // Torus Ring
+            const geo3 = new THREE.TorusGeometry(9, 1.5, 16, 40);
+            const mesh3 = new THREE.Mesh(geo3, shapeMat);
+            mesh3.position.set(0, -20, -22);
+            shapeGroup.add(mesh3);
+
+            scene.add(shapeGroup);
+
+            document.addEventListener('mousemove', onDocumentMouseMove);
+            window.addEventListener('resize', onWindowResize);
+
+            animate();
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.04;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.04;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            camera.position.x = targetX * 0.2;
+            camera.position.y = -targetY * 0.2;
+            camera.lookAt(scene.position);
+
+            if (particleSystem) {
+                particleSystem.rotation.y += 0.0012;
+                particleSystem.rotation.x += 0.0006;
+            }
+
+            if (shapeGroup) {
+                shapeGroup.children.forEach((child, index) => {
+                    child.rotation.x += 0.003 * (index + 1);
+                    child.rotation.y += 0.004 * (index + 1);
+                });
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = function() {
+            init3D();
+            updateCounts();
+        };
+
+        /* -------------------------------------------------------------
+           2. DYNAMIC RANGE ALTERNATING PROCESSING LOGIC
+        ------------------------------------------------------------- */
+        
+        const range1 = document.getElementById('range1');
+        const range2 = document.getElementById('range2');
+        const range3 = document.getElementById('range3');
+        const outputResult = document.getElementById('output-result');
+
+        const statR1 = document.getElementById('stat-r1');
+        const statR2 = document.getElementById('stat-r2');
+        const statR3 = document.getElementById('stat-r3');
+        const statOutput = document.getElementById('stat-output');
+
+        const btnAlternate = document.getElementById('btn-alternate');
+        const btnDemo = document.getElementById('btn-demo');
+        const btnClearAll = document.getElementById('btn-clear-all');
+        const clearR1 = document.getElementById('clear-r1');
+        const clearR2 = document.getElementById('clear-r2');
+        const clearR3 = document.getElementById('clear-r3');
+
+        const delimiterSelect = document.getElementById('delimiter-select');
+        const customDelimiter = document.getElementById('custom-delimiter');
+        const chkDuplicates = document.getElementById('chk-duplicates');
+        const chkBlanks = document.getElementById('chk-blanks');
+
+        const btnCopy = document.getElementById('btn-copy');
+        const btnDownload = document.getElementById('btn-download');
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+
+        lucide.createIcons();
+
+        function showToast(msg) {
+            toastText.textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2600);
+        }
+
+        function getCleanLines(text) {
+            if (!text) return [];
+            let lines = text.split(/\r?\n/);
+            lines = lines.map(line => line.trim());
+
+            if (chkBlanks.checked) {
+                lines = lines.filter(line => line.length > 0);
+            }
+            return lines;
+        }
+
+        function updateCounts() {
+            const r1 = getCleanLines(range1.value);
+            const r2 = getCleanLines(range2.value);
+            const r3 = getCleanLines(range3.value);
+            
+            statR1.textContent = `${r1.length} টি আইটেম`;
+            statR2.textContent = `${r2.length} টি আইটেম`;
+            statR3.textContent = `${r3.length} টি আইটেম`;
+        }
+
+        function processMix() {
+            const list1 = getCleanLines(range1.value);
+            const list2 = getCleanLines(range2.value);
+            const list3 = getCleanLines(range3.value);
+
+            const activeLists = [];
+            if (list1.length > 0) activeLists.push(list1);
+            if (list2.length > 0) activeLists.push(list2);
+            if (list3.length > 0) activeLists.push(list3);
+
+            if (activeLists.length === 0) {
+                outputResult.value = '';
+                statOutput.textContent = 'মোট নম্বর: 0 টি';
+                return;
+            }
+
+            let result = [];
+            let maxLen = Math.max(...activeLists.map(l => l.length));
+
+            for (let i = 0; i < maxLen; i++) {
+                if (list1.length > 0 && i < list1.length) result.push(list1[i]);
+                if (list2.length > 0 && i < list2.length) result.push(list2[i]);
+                if (list3.length > 0 && i < list3.length) result.push(list3[i]);
+            }
+
+            formatAndDisplayOutput(result);
+        }
+
+        function formatAndDisplayOutput(arr) {
+            if (chkDuplicates.checked) {
+                arr = [...new Set(arr)];
+            }
+
+            let delimiter = '\n';
+            const sel = delimiterSelect.value;
+
+            if (sel === 'comma') delimiter = ',';
+            else if (sel === 'comma-space') delimiter = ', ';
+            else if (sel === 'space') delimiter = ' ';
+            else if (sel === 'custom') delimiter = customDelimiter.value || ' ';
+
+            outputResult.value = arr.join(delimiter);
+            statOutput.textContent = `মোট নম্বর: ${arr.length} টি`;
+        }
+
+        /* -------------------------------------------------------------
+           3. EVENT LISTENERS
+        ------------------------------------------------------------- */
+
+        range1.addEventListener('input', () => { updateCounts(); processMix(); });
+        range2.addEventListener('input', () => { updateCounts(); processMix(); });
+        range3.addEventListener('input', () => { updateCounts(); processMix(); });
+
+        delimiterSelect.addEventListener('change', () => {
+            if (delimiterSelect.value === 'custom') {
+                customDelimiter.classList.remove('hidden');
+            } else {
+                customDelimiter.classList.add('hidden');
+            }
+            processMix();
+        });
+
+        customDelimiter.addEventListener('input', processMix);
+        chkDuplicates.addEventListener('change', processMix);
+        chkBlanks.addEventListener('change', () => { updateCounts(); processMix(); });
+
+        btnAlternate.addEventListener('click', () => {
+            processMix();
+            showToast('MIXT Alternated List সফলভাবে তৈরি হয়েছে!');
+        });
+
+        btnDemo.addEventListener('click', () => {
+            range1.value = `251970919666\n251970915403\n251970919458\n251970911926`;
+            range2.value = `251968887492\n251968881258\n251968883188\n251968886488`;
+            range3.value = `251950001111\n251950002222\n251950003333\n251950004444`;
+            updateCounts();
+            processMix();
+            showToast('ডেমো ডেটা লোড করা হয়েছে!');
+        });
+
+        clearR1.addEventListener('click', () => { range1.value = ''; updateCounts(); processMix(); });
+        clearR2.addEventListener('click', () => { range2.value = ''; updateCounts(); processMix(); });
+        clearR3.addEventListener('click', () => { range3.value = ''; updateCounts(); processMix(); });
+
+        btnClearAll.addEventListener('click', () => {
+            range1.value = '';
+            range2.value = '';
+            range3.value = '';
+            outputResult.value = '';
+            updateCounts();
+            statOutput.textContent = 'মোট নম্বর: 0 টি';
+            showToast('সব ইনপুট খালি করা হয়েছে!');
+        });
+
+        btnCopy.addEventListener('click', () => {
+            if (!outputResult.value.trim()) {
+                showToast('কপি করার জন্য কোনো আউটপুট নেই!');
+                return;
+            }
+
+            outputResult.select();
+            try {
+                document.execCommand('copy');
+                const copyBtnText = document.getElementById('copy-btn-text');
+                copyBtnText.textContent = 'কপি হয়েছে!';
+                showToast('১-ক্লিকে কপি সম্পন্ন হয়েছে!');
+                setTimeout(() => { copyBtnText.textContent = '১ ক্লিকে কপি করুন'; }, 2000);
+            } catch (err) {
+                showToast('কপি করতে সমস্যা হয়েছে!');
+            }
+        });
+
+        btnDownload.addEventListener('click', () => {
+            const text = outputResult.value;
+            if (!text.trim()) {
+                showToast('ডাউনলোড করার জন্য কোনো আউটপুট নেই!');
+                return;
+            }
+
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MIXT_number_by_sadi_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('.TXT ফাইল ডাউনলোড শুরু হয়েছে!');
+        });
+    </script>
+</body>
+</html>
